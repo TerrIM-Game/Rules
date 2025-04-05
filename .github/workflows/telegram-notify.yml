@@ -1,0 +1,30 @@
+name: Telegram Notify
+
+on:
+  push:
+    branches:
+      - main  # Укажите вашу главную ветку (main, master и т.д.)
+  pull_request:
+    branches:
+      - main
+    types: [closed]  # Уведомление только при мердже (closed + merged)
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Send Telegram Message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Событие: ${{ github.event_name }}
+            Репозиторий: ${{ github.repository }}
+            Автор: ${{ github.actor }}
+            Ветка: ${{ github.ref_name }}
+            Сообщение коммита: ${{ github.event.commits[0].message || 'Мердж pull request' }}
+            Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
