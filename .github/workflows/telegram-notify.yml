@@ -22,23 +22,17 @@ jobs:
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            commits=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[].id')
-            files=""
-            for commit in $commits; do
-              if git rev-parse "$commit^" >/dev/null 2>&1; then
-                files+=$(git diff --name-only "$commit^" "$commit" | sed 's/^/- /')$'\n'
-              else
-                files+=$(git diff --name-only --root "$commit" | sed 's/^/- /')$'\n'
-              fi
-            done
-            files=$(echo "$files" | sort -u | grep -v '^$')
+            # Получаем SHA предыдущего коммита на ветке до пуша
+            PREVIOUS_SHA=$(git rev-parse ${{ github.sha }}^)
+            # Сравниваем текущее состояние с предыдущим
+            files=$(git diff --name-only $PREVIOUS_SHA ${{ github.sha }} | sed 's/^/- `/' | sed 's/$/`/')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
-              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- /')
+              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- `/' | sed 's/$/`/')
           fi
           if [ -z "$files" ]; then
-            files="- Нет измененных файлов"
+            files="- `Нет измененных файлов`"
           fi
           echo "Files detected: $files"
           echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
@@ -53,7 +47,6 @@ jobs:
           else
             EVENT_TYPE="Мердж"
           fi
-          # Формируем сообщение с реальными переносами строк через printf
           MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
             "$EVENT_TYPE" \
             "${{ github.repository }}" \
