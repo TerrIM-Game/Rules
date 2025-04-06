@@ -3,11 +3,11 @@ name: Telegram Notify
 on:
   push:
     branches:
-      - main  # Укажите вашу главную ветку (main, master и т.д.)
+      - main
   pull_request:
     branches:
       - main
-    types: [closed]  # Уведомление только при мердже (closed + merged)
+    types: [closed]
 
 jobs:
   notify:
@@ -22,30 +22,28 @@ jobs:
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            # Для пуша берем измененные файлы из последнего коммита
-            if git rev-parse HEAD^ >/dev/null 2>&1; then
-              files=$(git diff --name-only HEAD^ HEAD | sed 's/^/- /')
-            else
-              files=$(git diff --name-only --root HEAD | sed 's/^/- /')
-            fi
+            commits=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[].id')
+            files=""
+            for commit in $commits; do
+              if git rev-parse "$commit^" >/dev/null 2>&1; then
+                files+=$(git diff --name-only "$commit^" "$commit" | sed 's/^/- /')$'\n'
+              else
+                files+=$(git diff --name-only --root "$commit" | sed 's/^/- /')$'\n'
+              fi
+            done
+            files=$(echo "$files" | sort -u | grep -v '^$')
           else
-            # Для мерджа берем измененные файлы из pull request
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- /')
           fi
-          # Если файлов нет, укажем "Нет измененных файлов"
           if [ -z "$files" ]; then
             files="- Нет измененных файлов"
           fi
-
-          echo "Files detected: $files"  # Отладочный вывод
-          
-          # Экранируем символы для Telegram и сохраняем в переменную
+          echo "Files detected: $files"
           echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$files" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-
 
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
@@ -54,10 +52,14 @@ jobs:
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d text="Событие: *${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}* \
-                    \nРепозиторий: _${{ github.repository }}_ \
-                    \nАвтор: _${{ github.actor }}_ \
-                    \nВетка: _${{ github.ref_name }}_ \
-                    \nСообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_ \
-                    \nИзмененные файлы:\n${{ steps.changed-files.outputs.CHANGED_FILES }} \
-                    \n[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})"
+            -d text="$(cat <<EOF
+Событие: *${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}*
+Репозиторий: _${{ github.repository }}_
+Автор: _${{ github.actor }}_
+Ветка: _${{ github.ref_name }}_
+Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_
+Измененные файлы:
+${{ steps.changed-files.outputs.CHANGED_FILES }}
+[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+EOF
+)"
