@@ -52,7 +52,7 @@ jobs:
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d text="$(cat <<EOF
+            -d "text=$(cat <<EOF
 Событие: *${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}*
 Репозиторий: _${{ github.repository }}_
 Автор: _${{ github.actor }}_
