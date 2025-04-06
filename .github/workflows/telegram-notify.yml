@@ -48,22 +48,21 @@ jobs:
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
         run: |
-          # Определяем тип события в shell
           if [ "${{ github.event_name }}" = "push" ]; then
             EVENT_TYPE="Пуш"
           else
             EVENT_TYPE="Мердж"
           fi
-          MESSAGE=$(cat <<EOF
-Репозиторий: _${{ github.repository }}_
-Автор: _${{ github.actor }}_
-Ветка: _${{ github.ref_name }}_
-Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_
-Измененные файлы:
-${{ steps.changed-files.outputs.CHANGED_FILES }}
-[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-EOF
-          )
+          # Формируем сообщение с реальными переносами строк через printf
+          MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
+            "$EVENT_TYPE" \
+            "${{ github.repository }}" \
+            "${{ github.actor }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
+            "${{ steps.changed-files.outputs.CHANGED_FILES }}" \
+            "${{ github.repository }}" \
+            "${{ github.sha }}")
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
