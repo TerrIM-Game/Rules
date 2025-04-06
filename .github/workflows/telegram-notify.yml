@@ -48,11 +48,7 @@ jobs:
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
         run: |
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_TO }}" \
-            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
-            -d parse_mode="Markdown" \
-            -d "text=$(cat <<EOF
+          MESSAGE=$(cat <<EOF
 Событие: *${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}*
 Репозиторий: _${{ github.repository }}_
 Автор: _${{ github.actor }}_
@@ -62,4 +58,9 @@ jobs:
 ${{ steps.changed-files.outputs.CHANGED_FILES }}
 [Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
 EOF
-)"
+          )
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_TO }}" \
+            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
+            -d parse_mode="Markdown" \
+            -d "text=$MESSAGE"
