@@ -48,8 +48,14 @@ jobs:
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
         run: |
+          # Определяем тип события в shell
+          if [ "${{ github.event_name }}" = "push" ]; then
+            EVENT_TYPE="Пуш"
+          else
+            EVENT_TYPE="Мердж"
+          fi
           MESSAGE=$(cat <<EOF
-Событие: *${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}*
+Событие: *$EVENT_TYPE*
 Репозиторий: _${{ github.repository }}_
 Автор: _${{ github.actor }}_
 Ветка: _${{ github.ref_name }}_
