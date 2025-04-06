@@ -32,6 +32,9 @@ jobs:
           if [ -z "$files" ]; then
             files="- Нет измененных файлов"
           fi
+
+          echo "Files detected: $files"  # Отладочный вывод
+          
           # Экранируем символы для Telegram и сохраняем в переменную
           echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$files" >> $GITHUB_OUTPUT
@@ -44,11 +47,12 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message_thread_id: ${{ secrets.TELEGRAM_THREAD_ID }}  # ID треда в чате
+          message_thread_id: 550  # ID треда в чате
           message: |
             Событие: ${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}
             Репозиторий: ${{ github.repository }}
             Автор: ${{ github.actor }}
+            Тред: ${{ secrets.TELEGRAM_THREAD_ID }}
             Ветка: ${{ github.ref_name }}
             Сообщение: ${{ github.event.commits[0].message || github.event.pull_request.title }}
             Измененные файлы:
