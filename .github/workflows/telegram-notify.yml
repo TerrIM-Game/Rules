@@ -34,7 +34,7 @@ jobs:
             files=$(echo "$files" | sort -u | grep -v '^$')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              ${{ github.event_pull_request._links.commits.href }} | \
+              ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- /')
           fi
           if [ -z "$files" ]; then
@@ -53,15 +53,18 @@ jobs:
           else
             EVENT_TYPE="Мердж"
           fi
-          MESSAGE="Событие: *${EVENT_TYPE}*\n"
-          MESSAGE="${MESSAGE}Репозиторий: _${{ github.repository }}_\n"
-          MESSAGE="${MESSAGE}Автор: _${{ github.actor }}_\n"
-          MESSAGE="${MESSAGE}Ветка: _${{ github.ref_name }}_\n"
-          MESSAGE="${MESSAGE}Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_\n"
-          MESSAGE="${MESSAGE}Измененные файлы:\n${{ steps.changed-files.outputs.CHANGED_FILES }}\n"
-          MESSAGE="${MESSAGE}[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})"
+          # Формируем сообщение с реальными переносами строк через printf
+          MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
+            "$EVENT_TYPE" \
+            "${{ github.repository }}" \
+            "${{ github.actor }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
+            "${{ steps.changed-files.outputs.CHANGED_FILES }}" \
+            "${{ github.repository }}" \
+            "${{ github.sha }}")
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d "text=${MESSAGE}"
+            -d "text=$MESSAGE"
