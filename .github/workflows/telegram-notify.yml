@@ -1,0 +1,56 @@
+name: Telegram Notify
+
+on:
+  push:
+    branches:
+      - main  # Укажите вашу главную ветку (main, master и т.д.)
+  pull_request:
+    branches:
+      - main
+    types: [closed]  # Уведомление только при мердже (closed + merged)
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare Changed Files
+        id: changed-files
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # Для пуша берем измененные файлы из последнего коммита
+            files=$(git diff --name-only HEAD^ HEAD | sed 's/^/- /')
+          else
+            # Для мерджа берем измененные файлы из pull request
+            files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              ${{ github.event.pull_request._links.commits.href }} | \
+              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- /')
+          fi
+          # Если файлов нет, укажем "Нет измененных файлов"
+          if [ -z "$files" ]; then
+            files="- Нет измененных файлов"
+          fi
+          # Экранируем символы для Telegram и сохраняем в переменную
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
+          echo "$files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+
+      - name: Send Telegram Message
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message_thread_id: ${{ secrets.TELEGRAM_THREAD_ID }}  # ID треда в чате
+          message: |
+            Событие: ${{ github.event_name == 'push' && 'Пуш' || 'Мердж' }}
+            Репозиторий: ${{ github.repository }}
+            Автор: ${{ github.actor }}
+            Ветка: ${{ github.ref_name }}
+            Сообщение: ${{ github.event.commits[0].message || github.event.pull_request.title }}
+            Измененные файлы:
+            ${{ steps.changed-files.outputs.CHANGED_FILES }}
+            Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
