@@ -55,7 +55,6 @@ jobs:
             EVENT_TYPE="Мердж"
           fi
           MESSAGE=$(cat <<EOF
-Событие: *$EVENT_TYPE*
 Репозиторий: _${{ github.repository }}_
 Автор: _${{ github.actor }}_
 Ветка: _${{ github.ref_name }}_
