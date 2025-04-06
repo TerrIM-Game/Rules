@@ -34,7 +34,7 @@ jobs:
             files=$(echo "$files" | sort -u | grep -v '^$')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              ${{ github.event.pull_request._links.commits.href }} | \
+              ${{ github.event_pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sort -u | sed 's/^/- /')
           fi
           if [ -z "$files" ]; then
@@ -48,24 +48,20 @@ jobs:
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
         run: |
-          # Определяем тип события в shell
           if [ "${{ github.event_name }}" = "push" ]; then
             EVENT_TYPE="Пуш"
           else
             EVENT_TYPE="Мердж"
           fi
-          MESSAGE=$(cat <<EOF
-Репозиторий: _${{ github.repository }}_
-Автор: _${{ github.actor }}_
-Ветка: _${{ github.ref_name }}_
-Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_
-Измененные файлы:
-${{ steps.changed-files.outputs.CHANGED_FILES }}
-[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-EOF
-          )
+          MESSAGE="Событие: *${EVENT_TYPE}*\n"
+          MESSAGE="${MESSAGE}Репозиторий: _${{ github.repository }}_\n"
+          MESSAGE="${MESSAGE}Автор: _${{ github.actor }}_\n"
+          MESSAGE="${MESSAGE}Ветка: _${{ github.ref_name }}_\n"
+          MESSAGE="${MESSAGE}Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_\n"
+          MESSAGE="${MESSAGE}Измененные файлы:\n${{ steps.changed-files.outputs.CHANGED_FILES }}\n"
+          MESSAGE="${MESSAGE}[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})"
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d "text=$MESSAGE"
+            -d "text=${MESSAGE}"
