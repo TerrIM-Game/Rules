@@ -48,10 +48,15 @@ jobs:
       - name: Format Files for Telegram
         id: format-files
         run: |
-          formatted_files=$(echo "${{ steps.changed-files.outputs.RAW_FILES }}" | sed "s|^|- [\0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/\0)|" | grep -v '^$')
-          if [ -z "$formatted_files" ]; then
-            formatted_files="- Нет измененных файлов"
-          fi
+          formatted_files=""
+          echo "${{ steps.changed-files.outputs.RAW_FILES }}" | while IFS= read -r file; do
+            if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ]; then
+              formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$file)"$'\n'
+            else
+              formatted_files="- Нет измененных файлов"
+            fi
+          done
+          formatted_files=$(echo "$formatted_files" | grep -v '^$')
           echo "Formatted files: $formatted_files"
           echo "FORMATTED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$formatted_files" >> $GITHUB_OUTPUT
