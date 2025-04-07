@@ -54,14 +54,15 @@ jobs:
           formatted_files=""
           while IFS= read -r file || [ -n "$file" ]; do
             echo "Processing file: '$file'"
-            if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ]; then
-              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null)
+            if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ] && [ "$file" != ".DS_Store" ]; then
+              # Экранируем $file для безопасной передачи в Python
+              encoded_file=$(printf '%q' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null)
               if [ -z "$encoded_file" ]; then
-                encoded_file="$file"
+                encoded_file=$(printf '%q' "$file")  # Используем экранированное имя как запасной вариант
               fi
               echo "Encoded file: '$encoded_file'"
               formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
-            else
+            elif [ "$file" = "Нет измененных файлов" ]; then
               formatted_files="- Нет измененных файлов"
             fi
           done <<< "${{ steps.changed-files.outputs.RAW_FILES }}"
