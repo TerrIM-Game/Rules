@@ -52,20 +52,22 @@ jobs:
         run: |
           echo "Input RAW_FILES: '${{ steps.changed-files.outputs.RAW_FILES }}'"
           formatted_files=""
+          # Используем временный файл для безопасной обработки строк
+          echo "${{ steps.changed-files.outputs.RAW_FILES }}" > temp_files.txt
           while IFS= read -r file || [ -n "$file" ]; do
             echo "Processing file: '$file'"
             if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ] && [ "$file" != ".DS_Store" ]; then
-              # Экранируем $file для безопасной передачи в Python
-              encoded_file=$(printf '%q' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null)
-              if [ -z "$encoded_file" ]; then
-                encoded_file=$(printf '%q' "$file")  # Используем экранированное имя как запасной вариант
-              fi
+              # Сохраняем читаемое имя файла
+              readable_file="$file"
+              # Кодируем URL с помощью Python
+              encoded_file=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$file'''))" 2>/dev/null || echo "$file")
               echo "Encoded file: '$encoded_file'"
-              formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
+              formatted_files+="- [$readable_file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
             elif [ "$file" = "Нет измененных файлов" ]; then
               formatted_files="- Нет измененных файлов"
             fi
-          done <<< "${{ steps.changed-files.outputs.RAW_FILES }}"
+          done < temp_files.txt
+          rm -f temp_files.txt
           formatted_files=$(echo "$formatted_files" | grep -v '^$')
           echo "Formatted files: $formatted_files"
           echo "FORMATTED_FILES<<EOF" >> $GITHUB_OUTPUT
@@ -74,7 +76,7 @@ jobs:
         shell: /usr/bin/bash {0}
 
       - name: Send Telegram Message
-        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event_pull_request.merged == true)
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
             EVENT_TYPE="Пуш"
