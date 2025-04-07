@@ -66,13 +66,14 @@ jobs:
             EVENT_TYPE="Мердж"
           fi
           echo "Debug FORMATTED_FILES: ${{ steps.format-files.outputs.FORMATTED_FILES }}"
-          MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
-            "$EVENT_TYPE" \
-            "${{ github.repository }}" \
-            "${{ github.actor }}" \
-            "${{ github.ref_name }}" \
+          MESSAGE=$(printf "**%s**\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
             "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
+            "${{ github.actor }}" \
+            "$EVENT_TYPE" \
+            "${{ github.ref_name }}" \
+            "${{ github.repository }}" \
             "${{ steps.format-files.outputs.FORMATTED_FILES }}" \
+            "изменилось" \
             "${{ github.repository }}" \
             "${{ github.sha }}")
           echo "Final message: $MESSAGE"
