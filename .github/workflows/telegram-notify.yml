@@ -1,107 +1,132 @@
+# Название workflow для GitHub Actions
 name: Telegram Notify
 
+# События, запускающие workflow
 on:
   push:
     branches:
-      - main
+      - main  # Запуск при push в ветку main
   pull_request:
     branches:
-      - main
-    types: [closed]
+      - main  # Запуск при pull request в ветку main
+    types: [closed]  # Только для закрытых PR (включая merge)
 
 jobs:
   notify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Используем последнюю версию Ubuntu
     env:
-      LC_ALL: C.UTF-8  # Устанавливаем UTF-8 как локаль для shell
+      LC_ALL: C.UTF-8  # Устанавливаем локаль UTF-8 для корректной работы с русскими символами
+
     steps:
+      # Шаг 1: Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Полная история коммитов для работы с git diff
 
+      # Шаг 2: Подготовка списка изменённых файлов
       - name: Prepare Changed Files
-        id: changed-files
+        id: changed-files  # ID для доступа к результатам шага
         run: |
+          # Проверяем, вызвано ли событие push'ем (локальный push или merge)
           if [ "${{ github.event_name }}" = "push" ]; then
-            # Получаем все коммиты из события push
+            # Получаем список всех коммитов из события push
             commits=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[].id')
-            # Первый и последний коммит в push
+            # Первый коммит — начало изменений в этом push
             first_commit=$(echo "$commits" | head -n 1)
+            # Последний коммит — итоговое состояние после push
             last_commit="${{ github.sha }}"
-            # Состояние main перед первым коммитом в push
+            # Определяем состояние main перед первым коммитом
             before_push=$(git rev-parse "$first_commit^" 2>/dev/null || echo "")
             if [ -n "$before_push" ]; then
-              # Сравниваем main до push с итоговым состоянием
+              # Сравниваем main до push с итоговым состоянием, чтобы получить все изменённые файлы
               diff_files=$(git diff --name-only "$before_push" "$last_commit" 2>/dev/null)
             else
-              # Если это первый коммит в репозитории
+              # Если это первый коммит в репозитории, сравниваем с пустым деревом
               diff_files=$(git diff --name-only --root "$first_commit" 2>/dev/null)
             fi
             files=""
+            # Декодируем имена файлов из байтов UTF-8 в читаемый текст
             while IFS= read -r line; do
               decoded_line=$(printf '%b' "$line")
               files+="$decoded_line"$'\n'
             done <<< "$diff_files"
+            # Убираем дубликаты и пустые строки
             files=$(echo "$files" | sort -u | grep -v '^$')
           else
-            # Для pull_request используем все коммиты из PR
+            # Для события pull_request (закрытие с merge) собираем файлы из всех коммитов PR
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null)
             decoded_files=""
+            # Декодируем имена файлов
             while IFS= read -r line; do
               decoded_line=$(printf '%b' "$line")
               decoded_files+="$decoded_line"$'\n'
             done <<< "$files"
             files="$decoded_files"
+            # Убираем дубликаты и пустые строки
             files=$(echo "$files" | sort -u | grep -v '^$')
           fi
+          # Если файлов нет, задаём сообщение по умолчанию
           if [ -z "$files" ]; then
             files="Нет измененных файлов"
           fi
           echo "Raw files detected: $files"
+          # Сохраняем результат в output для следующего шага
           echo "RAW_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$files" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      # Шаг 3: Форматирование списка файлов для Telegram
       - name: Format Files for Telegram
-        id: format-files
+        id: format-files  # ID для доступа к результатам
         run: |
           echo "Input RAW_FILES: '${{ steps.changed-files.outputs.RAW_FILES }}'"
           formatted_files=""
+          # Записываем файлы во временный файл для обработки
           echo "${{ steps.changed-files.outputs.RAW_FILES }}" > temp_files.txt
-          while IFS= read -r file || [ -n "$file" ]; do
-            echo "Processing file: '$file'"
-            if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ] && [ "$file" != ".DS_Store" ]; then
-              readable_file="$file"
-              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
+          # Обрабатываем каждый файл
+          while IFS= read -r line || [ -n "$line" ]; do
+            echo "Processing file: '$line'"
+            if [ -n "$line" ] && [ "$line" != "Нет измененных файлов" ] && [ "$line" != ".DS_Store" ]; then
+              readable_file="$line"  # Читаемое имя файла
+              # Кодируем имя файла для URL
+              encoded_file=$(printf '%s' "$line" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$line")
               echo "Readable file: '$readable_file'"
               echo "Encoded file: '$encoded_file'"
+              # Форматируем строку в Markdown с ссылкой
               formatted_files+="- [$readable_file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
-            elif [ "$file" = "Нет измененных файлов" ]; then
+            elif [ "$line" = "Нет измененных файлов" ]; then
               formatted_files="- Нет измененных файлов"
             fi
           done < temp_files.txt
-          rm -f temp_files.txt
-          formatted_files=$(echo "$formatted_files" | grep -v '^$')
+          rm -f temp_files.txt  # Удаляем временный файл
+          formatted_files=$(echo "$formatted_files" | grep -v '^$')  # Убираем пустые строки
           echo "Formatted files: $formatted_files"
+          # Сохраняем результат в output
           echo "FORMATTED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$formatted_files" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-        shell: /usr/bin/bash {0}
+        shell: /usr/bin/bash {0}  # Используем bash для корректной работы скрипта
 
+      # Шаг 4: Отправка сообщения в Telegram
       - name: Send Telegram Message
+        # Выполняется только для push или merged pull_request
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event_pull_request.merged == true)
         run: |
+          # Определяем тип события для текста сообщения
           if [ "${{ github.event_name }}" = "push" ]; then
             EVENT_TYPE="Пуш"
           else
             EVENT_TYPE="Мердж"
           fi
-          MESSAGE_FILE="telegram_message.txt"
-          printf "**%s**\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
-            "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
+          MESSAGE_FILE="telegram_message.txt"  # Временный файл для сообщения
+          # Экранируем точку в имени файла в заголовке, чтобы избежать автоподстановки ссылок
+          COMMIT_MESSAGE=$(echo "${{ github.event.commits[0].message || github.event.pull_request.title }}" | sed 's/\./\\./g')
+          # Формируем сообщение в Markdown с жирным шрифтом через __ вместо **
+          printf "__%s__\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
+            "$COMMIT_MESSAGE" \
             "${{ github.actor }}" \
             "$EVENT_TYPE" \
             "${{ github.ref_name }}" \
@@ -112,11 +137,12 @@ jobs:
             "${{ github.sha }}" > "$MESSAGE_FILE"
           echo "Debug FORMATTED_FILES: ${{ steps.format-files.outputs.FORMATTED_FILES }}"
           echo "Final message:"
-          cat "$MESSAGE_FILE"
+          cat "$MESSAGE_FILE"  # Выводим сообщение для отладки
+          # Отправляем сообщение через Telegram API
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
             -d text="$(cat "$MESSAGE_FILE")"
-          rm -f "$MESSAGE_FILE"
-        shell: /usr/bin/bash {0}
+          rm -f "$MESSAGE_FILE"  # Удаляем временный файл
+        shell: /usr/bin/bash {0}  # Используем bash для корректной работы скрипта
