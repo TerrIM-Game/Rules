@@ -28,7 +28,6 @@ jobs:
             files=""
             for commit in $commits; do
               if git rev-parse "$commit^" >/dev/null 2>&1; then
-                # Получаем имена файлов и декодируем их
                 diff_files=$(git diff --name-only "$commit^" "$commit" 2>/dev/null)
                 while IFS= read -r line; do
                   decoded_line=$(printf '%b' "$line")
@@ -42,8 +41,10 @@ jobs:
                 done <<< "$diff_files"
               fi
             done
-            files=$(echo "$files" | grep -v '^$')
+            # Убираем дубликаты
+            files=$(echo "$files" | sort -u | grep -v '^$')
           else
+            # Для pull_request используем все коммиты из PR
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null)
@@ -53,7 +54,7 @@ jobs:
               decoded_files+="$decoded_line"$'\n'
             done <<< "$files"
             files="$decoded_files"
-            files=$(echo "$files" | grep -v '^$')
+            files=$(echo "$files" | sort -u | grep -v '^$')
           fi
           if [ -z "$files" ]; then
             files="Нет измененных файлов"
@@ -72,9 +73,7 @@ jobs:
           while IFS= read -r file || [ -n "$file" ]; do
             echo "Processing file: '$file'"
             if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ] && [ "$file" != ".DS_Store" ]; then
-              # Используем file как читаемое имя, так как оно уже декодировано
               readable_file="$file"
-              # Кодируем URL
               encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
               echo "Readable file: '$readable_file'"
               echo "Encoded file: '$encoded_file'"
@@ -92,7 +91,7 @@ jobs:
         shell: /usr/bin/bash {0}
 
       - name: Send Telegram Message
-        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event_pull_request.merged == true)
+        if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
             EVENT_TYPE="Пуш"
@@ -112,7 +111,3 @@ jobs:
             "${{ github.sha }}")
           echo "Final message: $MESSAGE"
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_TO }}" \
-            -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
-            -d parse_mode="Markdown" \
-            -d "text=$MESSAGE"
