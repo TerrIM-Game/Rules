@@ -24,25 +24,28 @@ jobs:
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
+            # Получаем все коммиты из события push
             commits=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[].id')
+            # Первый и последний коммит в push
+            first_commit=$(echo "$commits" | head -n 1)
+            last_commit="${{ github.sha }}"
+            # Состояние main перед первым коммитом в push
+            before_push=$(git rev-parse "$first_commit^" 2>/dev/null || echo "")
+            if [ -n "$before_push" ]; then
+              # Сравниваем main до push с итоговым состоянием
+              diff_files=$(git diff --name-only "$before_push" "$last_commit" 2>/dev/null)
+            else
+              # Если это первый коммит в репозитории
+              diff_files=$(git diff --name-only --root "$first_commit" 2>/dev/null)
+            fi
             files=""
-            for commit in $commits; do
-              if git rev-parse "$commit^" >/dev/null 2>&1; then
-                diff_files=$(git diff --name-only "$commit^" "$commit" 2>/dev/null)
-                while IFS= read -r line; do
-                  decoded_line=$(printf '%b' "$line")
-                  files+="$decoded_line"$'\n'
-                done <<< "$diff_files"
-              else
-                diff_files=$(git diff --name-only --root "$commit" 2>/dev/null)
-                while IFS= read -r line; do
-                  decoded_line=$(printf '%b' "$line")
-                  files+="$decoded_line"$'\n'
-                done <<< "$diff_files"
-              fi
-            done
+            while IFS= read -r line; do
+              decoded_line=$(printf '%b' "$line")
+              files+="$decoded_line"$'\n'
+            done <<< "$diff_files"
             files=$(echo "$files" | sort -u | grep -v '^$')
           else
+            # Для pull_request используем все коммиты из PR
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null)
@@ -96,7 +99,6 @@ jobs:
           else
             EVENT_TYPE="Мердж"
           fi
-          # Формируем сообщение и записываем его во временный файл для точной передачи
           MESSAGE_FILE="telegram_message.txt"
           printf "**%s**\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
             "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
@@ -111,7 +113,6 @@ jobs:
           echo "Debug FORMATTED_FILES: ${{ steps.format-files.outputs.FORMATTED_FILES }}"
           echo "Final message:"
           cat "$MESSAGE_FILE"
-          # Отправляем сообщение через curl, используя файл
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
