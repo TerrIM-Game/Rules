@@ -26,18 +26,16 @@ jobs:
             files=""
             for commit in $commits; do
               if git rev-parse "$commit^" >/dev/null 2>&1; then
-                # Перенаправляем ошибки git diff в /dev/null, чтобы избежать мусора
-                files+=$(git diff --name-only "$commit^" "$commit" 2>/dev/null | sed "s|^|- [\0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/\0)|")$'\n'
+                files+=$(git diff --name-only "$commit^" "$commit" 2>/dev/null | sed "s|^|- [&\](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/&)|")$'\n'
               else
-                files+=$(git diff --name-only --root "$commit" 2>/dev/null | sed "s|^|- [\0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/\0)|")$'\n'
+                files+=$(git diff --name-only --root "$commit" 2>/dev/null | sed "s|^|- [&\](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/&)|")$'\n'
               fi
             done
-            # Фильтруем только строки, начинающиеся с "- ["
             files=$(echo "$files" | grep "^- \[" | grep -v '^$')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
-              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null | sed "s|^|- [\0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/\0)|")
+              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null | sed "s|^|- [&\](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/&)|")
           fi
           if [ -z "$files" ]; then
             files="- Нет измененных файлов"
