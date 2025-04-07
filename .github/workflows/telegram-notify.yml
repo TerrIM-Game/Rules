@@ -12,6 +12,8 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
+    env:
+      LC_ALL: C.UTF-8  # Устанавливаем UTF-8 как локаль для shell
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,10 +50,17 @@ jobs:
       - name: Format Files for Telegram
         id: format-files
         run: |
-          formatted_files=$(echo "${{ steps.changed-files.outputs.RAW_FILES }}" | sed -E "s|^(.*)$|- [\1](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/\1)|" | grep -v '^$')
-          if [ -z "$formatted_files" ]; then
-            formatted_files="- Нет измененных файлов"
-          fi
+          formatted_files=""
+          echo "${{ steps.changed-files.outputs.RAW_FILES }}" | while IFS= read -r file; do
+            if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ]; then
+              # Кодируем URL с помощью python для правильной обработки UTF-8
+              encoded_file=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$file'''))")
+              formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
+            else
+              formatted_files="- Нет измененных файлов"
+            fi
+          done
+          formatted_files=$(echo "$formatted_files" | grep -v '^$')
           echo "Formatted files: $formatted_files"
           echo "FORMATTED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$formatted_files" >> $GITHUB_OUTPUT
