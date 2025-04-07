@@ -28,9 +28,18 @@ jobs:
             files=""
             for commit in $commits; do
               if git rev-parse "$commit^" >/dev/null 2>&1; then
-                files+=$(git diff --name-only "$commit^" "$commit" 2>/dev/null)$'\n'
+                # Получаем имена файлов и декодируем их
+                diff_files=$(git diff --name-only "$commit^" "$commit" 2>/dev/null)
+                while IFS= read -r line; do
+                  decoded_line=$(printf '%b' "$line")
+                  files+="$decoded_line"$'\n'
+                done <<< "$diff_files"
               else
-                files+=$(git diff --name-only --root "$commit" 2>/dev/null)$'\n'
+                diff_files=$(git diff --name-only --root "$commit" 2>/dev/null)
+                while IFS= read -r line; do
+                  decoded_line=$(printf '%b' "$line")
+                  files+="$decoded_line"$'\n'
+                done <<< "$diff_files"
               fi
             done
             files=$(echo "$files" | grep -v '^$')
@@ -38,6 +47,13 @@ jobs:
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
               jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} 2>/dev/null)
+            decoded_files=""
+            while IFS= read -r line; do
+              decoded_line=$(printf '%b' "$line")
+              decoded_files+="$decoded_line"$'\n'
+            done <<< "$files"
+            files="$decoded_files"
+            files=$(echo "$files" | grep -v '^$')
           fi
           if [ -z "$files" ]; then
             files="Нет измененных файлов"
@@ -56,10 +72,10 @@ jobs:
           while IFS= read -r file || [ -n "$file" ]; do
             echo "Processing file: '$file'"
             if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ] && [ "$file" != ".DS_Store" ]; then
-              # Декодируем байты в читаемый текст
-              readable_file=$(printf '%b' "$file")
-              # Кодируем URL из читаемого текста
-              encoded_file=$(printf '%s' "$readable_file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
+              # Используем file как читаемое имя, так как оно уже декодировано
+              readable_file="$file"
+              # Кодируем URL
+              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
               echo "Readable file: '$readable_file'"
               echo "Encoded file: '$encoded_file'"
               formatted_files+="- [$readable_file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
