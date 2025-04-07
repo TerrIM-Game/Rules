@@ -50,11 +50,13 @@ jobs:
       - name: Format Files for Telegram
         id: format-files
         run: |
+          echo "Input RAW_FILES: '${{ steps.changed-files.outputs.RAW_FILES }}'"
           formatted_files=""
-          echo "${{ steps.changed-files.outputs.RAW_FILES }}" | while IFS= read -r file; do
+          echo "${{ steps.changed-files.outputs.RAW_FILES }}" | while IFS= read -r file || [ -n "$file" ]; do
+            echo "Processing file: '$file'"
             if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ]; then
-              # Кодируем URL с помощью python для правильной обработки UTF-8
-              encoded_file=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$file'''))")
+              # Используем printf для безопасной передачи строки в Python
+              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
               formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
             else
               formatted_files="- Нет измененных файлов"
