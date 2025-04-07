@@ -22,10 +22,16 @@ jobs:
         id: changed-files
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            # Получаем SHA предыдущего коммита на ветке до пуша
-            PREVIOUS_SHA=$(git rev-parse ${{ github.sha }}^)
-            # Сравниваем текущее состояние с предыдущим
-            files=$(git diff --name-only $PREVIOUS_SHA ${{ github.sha }} | sed 's/^/- `/' | sed 's/$/`/')
+            commits=$(echo '${{ toJson(github.event.commits) }}' | jq -r '.[].id')
+            files=""
+            for commit in $commits; do
+              if git rev-parse "$commit^" >/dev/null 2>&1; then
+                files+=$(git diff --name-only "$commit^" "$commit" | sed 's/^/- `/' | sed 's/$/`/')$'\n'
+              else
+                files+=$(git diff --name-only --root "$commit" | sed 's/^/- `/' | sed 's/$/`/')$'\n'
+              fi
+            done
+            files=$(echo "$files" | sort -u | grep -v '^$')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
@@ -47,17 +53,18 @@ jobs:
           else
             EVENT_TYPE="Мердж"
           fi
-          MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
-            "$EVENT_TYPE" \
-            "${{ github.repository }}" \
-            "${{ github.actor }}" \
-            "${{ github.ref_name }}" \
-            "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
-            "${{ steps.changed-files.outputs.CHANGED_FILES }}" \
-            "${{ github.repository }}" \
-            "${{ github.sha }}")
+          # Добавляем отладочный вывод для проверки содержимого CHANGED_FILES
+          echo "Debug CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}"
+          # Формируем сообщение, избегая лишней обработки в printf
+          MESSAGE="Событие: *${EVENT_TYPE}*\n"
+          MESSAGE="${MESSAGE}Репозиторий: _${{ github.repository }}_\n"
+          MESSAGE="${MESSAGE}Автор: _${{ github.actor }}_\n"
+          MESSAGE="${MESSAGE}Ветка: _${{ github.ref_name }}_\n"
+          MESSAGE="${MESSAGE}Сообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_\n"
+          MESSAGE="${MESSAGE}Измененные файлы:\n${{ steps.changed-files.outputs.CHANGED_FILES }}\n"
+          MESSAGE="${MESSAGE}[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})"
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d "text=$MESSAGE"
+            -d "text=${MESSAGE}"
