@@ -26,10 +26,9 @@ jobs:
             files=""
             for commit in $commits; do
               if git rev-parse "$commit^" >/dev/null 2>&1; then
-                # Формируем ссылки на файлы
-                files+=$(git diff --name-only "$commit^" "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|" )$'\n'
+                files+=$(git diff --name-only "$commit^" "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|")$'\n'
               else
-                files+=$(git diff --name-only --root "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|" )$'\n'
+                files+=$(git diff --name-only --root "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|")$'\n'
               fi
             done
             files=$(echo "$files" | grep -v '^$')
