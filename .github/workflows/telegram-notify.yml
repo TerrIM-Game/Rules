@@ -26,19 +26,20 @@ jobs:
             files=""
             for commit in $commits; do
               if git rev-parse "$commit^" >/dev/null 2>&1; then
-                files+=$(git diff --name-only "$commit^" "$commit" | sed 's/^/- `/' | sed 's/$/`/')$'\n'
+                # Формируем ссылки на файлы
+                files+=$(git diff --name-only "$commit^" "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|" )$'\n'
               else
-                files+=$(git diff --name-only --root "$commit" | sed 's/^/- `/' | sed 's/$/`/')$'\n'
+                files+=$(git diff --name-only --root "$commit" | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|" )$'\n'
               fi
             done
             files=$(echo "$files" | grep -v '^$')
           else
             files=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               ${{ github.event.pull_request._links.commits.href }} | \
-              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sed 's/^/- `/' | sed 's/$/`/')
+              jq -r '.[] | .sha' | xargs -I {} git diff --name-only {}^ {} | sed "s|^|- [$0](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$0)|")
           fi
           if [ -z "$files" ]; then
-            files="- `Нет измененных файлов`"
+            files="- Нет измененных файлов"
           fi
           echo "Files detected: $files"
           echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
@@ -54,11 +55,17 @@ jobs:
             EVENT_TYPE="Мердж"
           fi
           echo "Debug CHANGED_FILES: ${{ steps.changed-files.outputs.CHANGED_FILES }}"
-          # Экранируем обратные апострофы в CHANGED_FILES
-          ESCAPED_FILES=$(echo "${{ steps.changed-files.outputs.CHANGED_FILES }}" | sed 's/`/\\`/g')
-          MESSAGE="Событие: *${EVENT_TYPE}*\nРепозиторий: _${{ github.repository }}_\nАвтор: _${{ github.actor }}_\nВетка: _${{ github.ref_name }}_\nСообщение: _${{ github.event.commits[0].message || github.event.pull_request.title }}_\nИзмененные файлы:\n${ESCAPED_FILES}\n[Ссылка](https://github.com/${{ github.repository }}/commit/${{ github.sha }})"
+          MESSAGE=$(printf "Событие: *%s*\nРепозиторий: _%s_\nАвтор: _%s_\nВетка: _%s_\nСообщение: _%s_\nИзмененные файлы:\n%s\n[Ссылка](https://github.com/%s/commit/%s)" \
+            "$EVENT_TYPE" \
+            "${{ github.repository }}" \
+            "${{ github.actor }}" \
+            "${{ github.ref_name }}" \
+            "${{ github.event.commits[0].message || github.event.pull_request.title }}" \
+            "${{ steps.changed-files.outputs.CHANGED_FILES }}" \
+            "${{ github.repository }}" \
+            "${{ github.sha }}")
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_TO }}" \
             -d message_thread_id="${{ secrets.TELEGRAM_THREAD_ID }}" \
             -d parse_mode="Markdown" \
-            -d "text=${MESSAGE}"
+            -d "text=$MESSAGE"
