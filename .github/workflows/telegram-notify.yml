@@ -55,8 +55,13 @@ jobs:
           echo "${{ steps.changed-files.outputs.RAW_FILES }}" | while IFS= read -r file || [ -n "$file" ]; do
             echo "Processing file: '$file'"
             if [ -n "$file" ] && [ "$file" != "Нет измененных файлов" ]; then
-              # Используем printf для безопасной передачи строки в Python
-              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null || echo "$file")
+              # Пробуем закодировать с Python, но не прерываем выполнение при ошибке
+              encoded_file=$(printf '%s' "$file" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))" 2>/dev/null)
+              if [ -z "$encoded_file" ]; then
+                # Если Python не сработал, используем исходное имя файла
+                encoded_file="$file"
+              fi
+              echo "Encoded file: '$encoded_file'"
               formatted_files+="- [$file](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/$encoded_file)"$'\n'
             else
               formatted_files="- Нет измененных файлов"
@@ -67,6 +72,7 @@ jobs:
           echo "FORMATTED_FILES<<EOF" >> $GITHUB_OUTPUT
           echo "$formatted_files" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
+        shell: /usr/bin/bash {0}  # Убираем -e, чтобы ошибки не прерывали шаг
 
       - name: Send Telegram Message
         if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
