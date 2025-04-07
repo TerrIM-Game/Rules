@@ -122,10 +122,10 @@ jobs:
             EVENT_TYPE="Мердж"
           fi
           MESSAGE_FILE="telegram_message.txt"  # Временный файл для сообщения
-          # Экранируем точку в имени файла в заголовке, чтобы избежать автоподстановки ссылок
-          COMMIT_MESSAGE=$(echo "${{ github.event.commits[0].message || github.event.pull_request.title }}" | sed 's/\./\\./g')
-          # Формируем сообщение в Markdown с жирным шрифтом через __ вместо **
-          printf "__%s__\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
+          # Добавляем неразрывный пробел перед текстом и заменяем точку на " .", чтобы убрать автоподстановку
+          COMMIT_MESSAGE=$(echo "${{ github.event.commits[0].message || github.event.pull_request.title }}" | sed 's/\./ \./g')
+          # Формируем сообщение с жирным шрифтом через __ и неразрывным пробелом в начале
+          printf "\u00A0__%s__\nАвтор: _%s_\n%s в %s для %s\nДокументы:\n%s\nПосмотреть что [%s](https://github.com/%s/commit/%s)" \
             "$COMMIT_MESSAGE" \
             "${{ github.actor }}" \
             "$EVENT_TYPE" \
