@@ -2,6 +2,8 @@
 
 
 ```dataview
-List
+table
+
 
 ```
+
