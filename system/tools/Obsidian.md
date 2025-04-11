@@ -7,6 +7,10 @@
 
 
 
+DataView 
+Плагин для отображения таблиц и списков по заметкам 
+Документация https://obsidian.rocks/dataview-in-obsidian-a-beginners-guide/
+https://s-blu.github.io/obsidian_dataview_example_vault/
 
 
 

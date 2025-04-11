@@ -1,0 +1,12 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "Капитан": "text",
+    "Дата начала": "date",
+    "Команда": "multitext",
+    "Действующий": "checkbox",
+    "Проекты": "multitext"
+  }
+}

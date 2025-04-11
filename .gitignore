@@ -1,5 +1,5 @@
 # Исключить папку с настройками Obsidian
-.obsidian/
+# .obsidian/
 
 # Исключить кэш (если используется)
 .obsidian-cache/
