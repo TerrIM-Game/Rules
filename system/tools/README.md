@@ -1,3 +1,9 @@
+---
+aliases:
+  - Инструменты
+  - Tools
+  - Программы
+---
 # Инструменты сообщества
 #Tools
 
@@ -6,6 +12,5 @@
 * [GitHub](system/tools/GitHub.md)
 * [Git](system/tools/Git.md)
 * 
-
 
 
