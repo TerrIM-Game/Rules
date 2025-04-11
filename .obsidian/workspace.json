@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Игра/ТеррИМчане/README.md",
+                "file": "system/templates/project.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "project"
             }
           }
         ]
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Игра/ТеррИМчане/README.md",
+                "file": "system/templates/project.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура README"
+              "title": "Структура project"
             }
           },
           {
@@ -196,8 +196,11 @@
   },
   "active": "76af21acdcfcb9f5",
   "lastOpenFiles": [
-    "Игра/ТеррИМчане/Скотников Дима.md",
+    "system/templates/member.md",
+    "system/templates/project.md",
+    "system/templates/contract.md",
     "Игра/ТеррИМчане/README.md",
+    "Игра/ТеррИМчане/Скотников Дима.md",
     "Игра/ТеррИМчане/Анвар Кадыров.md",
     "Игра/ТеррИМчане/Валерия Димитрова.md",
     "Игра/ТеррИМчане/Воинов Александр.md",
@@ -205,14 +208,11 @@
     "Игра/ТеррИМчане/Меркулова Екатерина.md",
     "Игра/ТеррИМчане/Провоторов Руслан.md",
     "Игра/ТеррИМчане/Рудых Денис.md",
-    "system/templates/member.md",
     "Игра/README.md",
     "system/tools/MkDocs.md",
     "system/tools/MarkDown.md",
     "system/tools/Obsidian.md",
     "Без названия.md",
-    "system/templates/project.md",
-    "system/templates/contract.md",
     "Игра/Проекты/П - КоммИТ.md",
     "Добро пожаловать/Игра.md",
     "Игра/Договоренности/ДВС 1.md",

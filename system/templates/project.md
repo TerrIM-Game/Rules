@@ -1,7 +1,9 @@
 ---
-Нименование: {{title}}
+Нименование:
+  "{ title }": 
 Капитан: 
 Команда: 
-Дата начала: {{date}}
+Дата:
+  "{ date }": 
 Type: "[[system/types/Project|Project]]"
 ---
