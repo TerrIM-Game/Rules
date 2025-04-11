@@ -1,0 +1,9 @@
+{
+	"nodes":[
+		{"id":"6e36dcb113c435e8","x":-270,"y":-460,"width":400,"height":400,"type":"file","file":"Игра/Проекты/П - Тест.md"},
+		{"id":"d03ebaff365f99fb","x":-120,"y":50,"width":250,"height":50,"type":"text","text":""}
+	],
+	"edges":[
+		{"id":"65c19412b803a52e","fromNode":"d03ebaff365f99fb","fromSide":"top","toNode":"6e36dcb113c435e8","toSide":"bottom"}
+	]
+}
