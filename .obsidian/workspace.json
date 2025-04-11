@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "system/templates/project.md",
+                "file": "README.md",
                 "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "project"
+              "title": "README"
             }
           }
         ]
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "system/templates/project.md",
+                "file": "README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура project"
+              "title": "Структура README"
             }
           },
           {
@@ -196,8 +196,8 @@
   },
   "active": "76af21acdcfcb9f5",
   "lastOpenFiles": [
-    "system/templates/member.md",
     "system/templates/project.md",
+    "system/templates/member.md",
     "system/templates/contract.md",
     "Игра/ТеррИМчане/README.md",
     "Игра/ТеррИМчане/Скотников Дима.md",
