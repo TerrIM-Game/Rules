@@ -1,4 +1,6 @@
 [
   "obsidian-git",
-  "dataview"
+  "dataview",
+  "dataview-publisher",
+  "dataview-serializer"
 ]
