@@ -12,7 +12,8 @@ DataView
 Документация https://obsidian.rocks/dataview-in-obsidian-a-beginners-guide/
 https://s-blu.github.io/obsidian_dataview_example_vault/
 
-
+Dataview Publisher
+Dataview Serializer
 
 ### OpenSource?
 
