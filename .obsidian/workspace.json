@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "system/tools/Obsidian.md",
+                "file": "system/tools/Telegramm Bot/Бот Тезаурус.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Obsidian"
+              "title": "Бот Тезаурус"
             }
           }
         ]
@@ -196,6 +196,11 @@
   },
   "active": "76af21acdcfcb9f5",
   "lastOpenFiles": [
+    "system/tools/Telegramm Bot/telegram_bot.py",
+    "system/tools/Telegramm Bot/Не подтвержден 217740.crdownload",
+    "system/tools/Obsidian.md",
+    "system/tools/Telegramm Bot/Бот Тезаурус.md",
+    "system/tools/Telegramm Bot",
     "publisher.md",
     "Игра/ТеррИМчане/Рудых Денис.md",
     "Без названия.md",
@@ -220,9 +225,6 @@
     "Игра/ТеррИМчане/Кордюшева Татьяна.md",
     "Игра/ТеррИМчане/Меркулова Екатерина.md",
     "Игра/ТеррИМчане/Провоторов Руслан.md",
-    "Игра/README.md",
-    "system/tools/MkDocs.md",
-    "system/tools/MarkDown.md",
     "Без названия.canvas",
     "system/tools/git",
     "Правила Игры",
@@ -230,8 +232,6 @@
     "Игра",
     "system/tools/obsidian",
     "system/tools",
-    "system/types",
-    "system/templates",
-    "system"
+    "system/types"
   ]
 }
