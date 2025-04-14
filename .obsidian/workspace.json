@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "Тезаурус/README.md",
                 "mode": "preview",
                 "source": true
               },
@@ -196,6 +196,15 @@
   },
   "active": "76af21acdcfcb9f5",
   "lastOpenFiles": [
+    "Правила Игры/Тезаурус.md",
+    "Тезаурус/README.md",
+    "Правила Игры/Совладение.md",
+    "Правила Игры/Смыслы.md",
+    "Правила Игры/Правила игры.md",
+    "Правила Игры/Механизмы.md",
+    "Тезаурус/ТеррИМ.md",
+    "Тезаурус",
+    "README.md",
     "system/templates/project.md",
     "system/templates/member.md",
     "system/templates/contract.md",
@@ -214,14 +223,6 @@
     "system/tools/Obsidian.md",
     "Без названия.md",
     "Игра/Проекты/П - КоммИТ.md",
-    "Добро пожаловать/Игра.md",
-    "Игра/Договоренности/ДВС 1.md",
-    "Игра/Проекты/П - ФинУпрСистема.md",
-    "Игра/Проекты/П - Социократия ТеррИМ.md",
-    "Игра/Проекты/П - Предбанник.md",
-    "system/README.md",
-    "system/tools/README.md",
-    "README.md",
     "Без названия.canvas",
     "system/tools/git",
     "Правила Игры",
@@ -231,7 +232,6 @@
     "system/tools",
     "system/types",
     "system/templates",
-    "system",
-    "5. Проекты/Исследовательские"
+    "system"
   ]
 }
