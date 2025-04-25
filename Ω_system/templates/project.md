@@ -5,5 +5,5 @@
 Команда: 
 Дата:
   "{ date }": 
-Type: "[[system/types/Project|Project]]"
+Type: "[[Ω_system/types/Project|Project]]"
 ---

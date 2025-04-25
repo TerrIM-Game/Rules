@@ -8,9 +8,9 @@ aliases:
 #Tools
 
 
-* [Obsidian](system/tools/Obsidian.md)
-* [GitHub](system/tools/GitHub.md)
-* [Git](system/tools/Git.md)
+* [Obsidian](Ω_system/tools/Obsidian.md)
+* [GitHub](Ω_system/tools/GitHub.md)
+* [Git](Ω_system/tools/Git.md)
 * 
 
 

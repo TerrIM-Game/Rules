@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "99ef410ea7495870",
+        "id": "a57c0c6e4361e516",
         "type": "tabs",
         "children": [
           {
-            "id": "76af21acdcfcb9f5",
+            "id": "784c53d52224baf2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "system/tools/Telegramm Bot/Бот Тезаурус.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Бот Тезаурус"
+              "title": "Новая вкладка"
             }
           }
         ]
@@ -194,17 +190,18 @@
       "workspaces:Пространства": false
     }
   },
-  "active": "76af21acdcfcb9f5",
+  "active": "784c53d52224baf2",
   "lastOpenFiles": [
-    "system/tools/Telegramm Bot/telegram_bot.py",
+    "Ω_system/tools/MkDocs.md",
+    "Ω_system/tools/Telegramm Bot/Бот Тезаурус.md",
+    "Ω_system/tools/Telegramm Bot/telegram_bot.py",
     "system/tools/Telegramm Bot/Не подтвержден 217740.crdownload",
-    "system/tools/Obsidian.md",
-    "system/tools/Telegramm Bot/Бот Тезаурус.md",
-    "system/tools/Telegramm Bot",
+    "Ω_system/tools/Obsidian.md",
+    "Ω_system/tools/Telegramm Bot",
     "publisher.md",
     "Игра/ТеррИМчане/Рудых Денис.md",
     "Без названия.md",
-    "system/tools/GitBook.md",
+    "Ω_system/tools/GitBook.md",
     "README.md",
     "Правила Игры/Тезаурус.md",
     "Тезаурус/README.md",
@@ -214,9 +211,9 @@
     "Правила Игры/Механизмы.md",
     "Тезаурус/ТеррИМ.md",
     "Тезаурус",
-    "system/templates/project.md",
-    "system/templates/member.md",
-    "system/templates/contract.md",
+    "Ω_system/templates/project.md",
+    "Ω_system/templates/member.md",
+    "Ω_system/templates/contract.md",
     "Игра/ТеррИМчане/README.md",
     "Игра/ТеррИМчане/Скотников Дима.md",
     "Игра/ТеррИМчане/Анвар Кадыров.md",
@@ -231,7 +228,6 @@
     "Игра/Следы",
     "Игра",
     "system/tools/obsidian",
-    "system/tools",
-    "system/types"
+    "Ω_system/tools"
   ]
 }

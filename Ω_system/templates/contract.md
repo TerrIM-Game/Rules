@@ -2,5 +2,5 @@
 Стороны: 
 Дата начала: 
 Действующий: 
-Type: "[[system/types/Contract|Contract]]"
+Type: "[[Ω_system/types/Contract|Contract]]"
 ---

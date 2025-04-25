@@ -3,5 +3,5 @@
 Дата: "{{date}}"
 Проекты: 
 Действующий: true
-Type: "[[system/types/Member|Member]]"
+Type: "[[Ω_system/types/Member|Member]]"
 ---
