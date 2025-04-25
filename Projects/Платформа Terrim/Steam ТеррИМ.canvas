@@ -1,6 +1,5 @@
 {
 	"nodes":[
-		{"id":"1ab4e2df7b4cebc9","type":"text","text":"Создатель","x":-625,"y":-690,"width":250,"height":50,"color":"1"},
 		{"id":"d7e56213dfc285f0","type":"text","text":"Капитан игры \"Глемпинг\"","x":-190,"y":-750,"width":250,"height":60,"color":"1"},
 		{"id":"660b25d86f945f64","type":"text","text":"Собственники игры \"Глемпинг\"","x":-90,"y":-670,"width":250,"height":60,"color":"1"},
 		{"id":"93462769d6223ca1","type":"text","text":"Разработчики Игры \"Глемпинг\"","x":-25,"y":-580,"width":250,"height":60,"color":"1"},
@@ -14,11 +13,15 @@
 		{"id":"ba7fc72040b3d77d","type":"text","text":"Игры","x":-560,"y":100,"width":250,"height":60,"color":"6"},
 		{"id":"753e8589376e4a19","type":"text","text":"Игра: Глемпинг","x":-315,"y":205,"width":250,"height":50,"color":"6"},
 		{"id":"b64f3fb23d490b79","x":21,"y":184,"width":316,"height":93,"color":"2","type":"text","text":"Пользование ценностями и возможностями созданного дела"},
-		{"id":"7e4d143182dfa032","type":"text","text":"Игровая роль","x":-922,"y":-420,"width":250,"height":60,"color":"4"},
-		{"id":"4ec440797e9aa3bc","type":"text","text":"Пользователь","x":-560,"y":-420,"width":250,"height":60,"color":"4"},
-		{"id":"18fe55cd5baa1f87","type":"text","text":"Пользователи игры \"Глемпинг\"","x":60,"y":-300,"width":250,"height":60,"color":"4"},
 		{"id":"421cd3de3f918f51","type":"text","text":"Социальная сеть","x":-375,"y":-212,"width":250,"height":60,"color":"5"},
-		{"id":"a0b80139502128f5","x":-1055,"y":-1220,"width":740,"height":400,"type":"file","file":"Игра/Проекты/П - Платформа ТеррИМ.md"}
+		{"id":"a0b80139502128f5","x":-1055,"y":-1220,"width":740,"height":400,"type":"file","file":"Игра/Проекты/П - Платформа ТеррИМ.md"},
+		{"id":"1ab4e2df7b4cebc9","type":"text","text":"Создатель","x":-520,"y":-670,"width":250,"height":50,"color":"1"},
+		{"id":"4ec440797e9aa3bc","type":"text","text":"Пользователь","x":-435,"y":-520,"width":250,"height":60,"color":"4"},
+		{"id":"18fe55cd5baa1f87","type":"text","text":"Пользователи игры \"Глемпинг\"","x":87,"y":-305,"width":250,"height":60,"color":"4"},
+		{"id":"7e4d143182dfa032","type":"text","text":"Игровая роль","x":-780,"y":-490,"width":250,"height":60,"color":"4"},
+		{"id":"dcf342df74c90690","x":-645,"y":-330,"width":250,"height":55,"color":"1","type":"text","text":"Игровой Фреймворк"},
+		{"id":"2aefc2c41d0ef880","x":-840,"y":-750,"width":250,"height":60,"color":"1","type":"text","text":"Мечта"},
+		{"id":"86d89acb6a2100c9","x":-940,"y":-610,"width":250,"height":60,"color":"1","type":"text","text":"Путь от Мечты к Делу"}
 	],
 	"edges":[
 		{"id":"c9abd8dc39f74c66","fromNode":"50fb90991522e5f5","fromSide":"top","toNode":"7e4d143182dfa032","toSide":"bottom"},
@@ -47,6 +50,12 @@
 		{"id":"9c88df8f4af3b9be","fromNode":"753e8589376e4a19","fromSide":"right","toNode":"b64f3fb23d490b79","toSide":"left"},
 		{"id":"0b465f138337c974","fromNode":"b64f3fb23d490b79","fromSide":"top","toNode":"c6bccaccf3833c74","toSide":"left"},
 		{"id":"eb092f668bcb1053","fromNode":"ba7fc72040b3d77d","fromSide":"bottom","toNode":"753e8589376e4a19","toSide":"left"},
-		{"id":"6fa0f50c99fc97ee","fromNode":"18fe55cd5baa1f87","fromSide":"bottom","toNode":"b64f3fb23d490b79","toSide":"top"}
+		{"id":"6fa0f50c99fc97ee","fromNode":"18fe55cd5baa1f87","fromSide":"bottom","toNode":"b64f3fb23d490b79","toSide":"top"},
+		{"id":"2dbee64098f7de7c","fromNode":"50fb90991522e5f5","fromSide":"top","toNode":"dcf342df74c90690","toSide":"left"},
+		{"id":"ace4f1ca61a7b44e","fromNode":"dcf342df74c90690","fromSide":"right","toNode":"adc11b123fa72b98","toSide":"left"},
+		{"id":"2d395976d41683d1","fromNode":"dcf342df74c90690","fromSide":"right","toNode":"802ea304f80129de","toSide":"bottom"},
+		{"id":"ea972d5614b06aea","fromNode":"1ab4e2df7b4cebc9","fromSide":"top","toNode":"2aefc2c41d0ef880","toSide":"right"},
+		{"id":"b944021fc01177f5","fromNode":"50fb90991522e5f5","fromSide":"top","toNode":"86d89acb6a2100c9","toSide":"bottom"},
+		{"id":"40d7cff8daac6a0b","fromNode":"86d89acb6a2100c9","fromSide":"top","toNode":"2aefc2c41d0ef880","toSide":"bottom"}
 	]
 }
