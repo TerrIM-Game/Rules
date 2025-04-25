@@ -11,14 +11,17 @@
             "id": "784c53d52224baf2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Игра/Проекты/П - Платформа ТеррИМ.md",
-                "mode": "source",
-                "source": true
+                "file": "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
+                "viewState": {
+                  "x": 73.28372293937386,
+                  "y": 284.99164333799945,
+                  "zoom": 0.11615193684895886
+                }
               },
-              "icon": "lucide-file",
-              "title": "П - Платформа ТеррИМ"
+              "icon": "lucide-layout-dashboard",
+              "title": "Steam ТеррИМ"
             }
           }
         ]
@@ -196,8 +199,10 @@
   },
   "active": "784c53d52224baf2",
   "lastOpenFiles": [
-    "Игра/Проекты/П - Предбанник.md",
+    "Projects/Платформа Terrim/Без названия.md",
+    "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
     "Игра/Проекты/П - Платформа ТеррИМ.md",
+    "Игра/Проекты/П - Предбанник.md",
     "Игра/Проекты/П - КоммИТ.md",
     "Projects/Платформа Terrim",
     "Projects",
@@ -210,7 +215,6 @@
     "Ω_system/tools/Telegramm Bot",
     "publisher.md",
     "Игра/ТеррИМчане/Рудых Денис.md",
-    "Без названия.md",
     "Ω_system/tools/GitBook.md",
     "README.md",
     "Правила Игры/Тезаурус.md",
@@ -228,7 +232,6 @@
     "Игра/ТеррИМчане/Скотников Дима.md",
     "Игра/ТеррИМчане/Анвар Кадыров.md",
     "Игра/ТеррИМчане/Валерия Димитрова.md",
-    "Игра/ТеррИМчане/Воинов Александр.md",
     "Без названия.canvas",
     "system/tools/git",
     "Правила Игры",

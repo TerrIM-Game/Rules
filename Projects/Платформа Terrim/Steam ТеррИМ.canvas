@@ -1,0 +1,40 @@
+{
+	"nodes":[
+		{"id":"660b25d86f945f64","x":35,"y":-340,"width":250,"height":60,"type":"text","text":"Собственники игры \"Глемпинг\""},
+		{"id":"93462769d6223ca1","x":100,"y":-260,"width":250,"height":60,"type":"text","text":"Разработчики Игры \"Глемпинг\""},
+		{"id":"753e8589376e4a19","x":160,"y":-180,"width":250,"height":50,"color":"6","type":"text","text":"Игра: Глемпинг"},
+		{"id":"18fe55cd5baa1f87","x":225,"y":-105,"width":250,"height":60,"type":"text","text":"Пользователи игры \"Глемпинг\""},
+		{"id":"d7e56213dfc285f0","x":-25,"y":-420,"width":250,"height":60,"type":"text","text":"Капитан игры \"Глемпинг\""},
+		{"id":"1ab4e2df7b4cebc9","x":-475,"y":-640,"width":250,"height":50,"type":"text","text":"Создатель"},
+		{"id":"7e4d143182dfa032","x":-707,"y":-450,"width":250,"height":60,"type":"text","text":"Игровая роль"},
+		{"id":"4ec440797e9aa3bc","x":-365,"y":-340,"width":250,"height":60,"type":"text","text":"Пользователь"},
+		{"id":"421cd3de3f918f51","x":-420,"y":120,"width":250,"height":60,"type":"text","text":"Социальная сеть"},
+		{"id":"c6bccaccf3833c74","x":-215,"y":220,"width":250,"height":60,"type":"text","text":"Механики социального взаимодействия"},
+		{"id":"50fb90991522e5f5","x":-800,"y":-187,"width":285,"height":65,"type":"text","text":"Игровая платформа"},
+		{"id":"ba7fc72040b3d77d","x":-380,"y":-187,"width":250,"height":65,"color":"6","type":"text","text":"Игры"},
+		{"id":"a75713010203eeb0","x":-582,"y":-45,"width":250,"height":60,"type":"text","text":"Маркетплей игр"},
+		{"id":"90afdec80a653d0d","x":35,"y":320,"width":250,"height":50,"type":"text","text":"Рейтинг Игр"},
+		{"id":"739854b39e5ea011","x":35,"y":400,"width":277,"height":90,"type":"text","text":"Шаблоны коммуникации как механики"},
+		{"id":"802ea304f80129de","x":-200,"y":520,"width":250,"height":60,"type":"text","text":"Механики делового взаимодействия"}
+	],
+	"edges":[
+		{"id":"c9abd8dc39f74c66","fromNode":"50fb90991522e5f5","fromSide":"top","toNode":"7e4d143182dfa032","toSide":"bottom"},
+		{"id":"477f2c2f494989f2","fromNode":"50fb90991522e5f5","fromSide":"right","toNode":"ba7fc72040b3d77d","toSide":"left"},
+		{"id":"1df8187822c9310c","fromNode":"ba7fc72040b3d77d","fromSide":"right","toNode":"753e8589376e4a19","toSide":"left"},
+		{"id":"6a2217fbff2b51bb","fromNode":"50fb90991522e5f5","fromSide":"bottom","toNode":"a75713010203eeb0","toSide":"left"},
+		{"id":"18fc8d513ec4bcdf","fromNode":"a75713010203eeb0","fromSide":"right","toNode":"ba7fc72040b3d77d","toSide":"bottom"},
+		{"id":"d25d97e6b8436b6f","fromNode":"7e4d143182dfa032","fromSide":"top","toNode":"1ab4e2df7b4cebc9","toSide":"left"},
+		{"id":"0f1656c6309ec3a5","fromNode":"1ab4e2df7b4cebc9","fromSide":"right","toNode":"d7e56213dfc285f0","toSide":"left"},
+		{"id":"350760a683ca1406","fromNode":"1ab4e2df7b4cebc9","fromSide":"right","toNode":"660b25d86f945f64","toSide":"left"},
+		{"id":"5f3e8e82fcbd6158","fromNode":"1ab4e2df7b4cebc9","fromSide":"right","toNode":"93462769d6223ca1","toSide":"left"},
+		{"id":"74f5b0540d452190","fromNode":"4ec440797e9aa3bc","fromSide":"right","toNode":"18fe55cd5baa1f87","toSide":"left"},
+		{"id":"04ccd0fc5998e22e","fromNode":"7e4d143182dfa032","fromSide":"right","toNode":"4ec440797e9aa3bc","toSide":"left"},
+		{"id":"894b7a9022f1df73","fromNode":"50fb90991522e5f5","fromSide":"bottom","toNode":"421cd3de3f918f51","toSide":"left"},
+		{"id":"abb73be3577966c9","fromNode":"4ec440797e9aa3bc","fromSide":"right","toNode":"421cd3de3f918f51","toSide":"right"},
+		{"id":"8b9d8a2793a5b209","fromNode":"421cd3de3f918f51","fromSide":"bottom","toNode":"c6bccaccf3833c74","toSide":"left"},
+		{"id":"66cab612fdf4a198","fromNode":"1ab4e2df7b4cebc9","fromSide":"right","toNode":"421cd3de3f918f51","toSide":"right"},
+		{"id":"2f61958ebcd7a4e5","fromNode":"c6bccaccf3833c74","fromSide":"bottom","toNode":"90afdec80a653d0d","toSide":"left"},
+		{"id":"1003aac5e43a45f5","fromNode":"c6bccaccf3833c74","fromSide":"bottom","toNode":"739854b39e5ea011","toSide":"left"},
+		{"id":"eae285a78efbf794","fromNode":"421cd3de3f918f51","fromSide":"bottom","toNode":"802ea304f80129de","toSide":"left"}
+	]
+}
