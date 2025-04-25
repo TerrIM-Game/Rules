@@ -15,9 +15,9 @@
               "state": {
                 "file": "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
                 "viewState": {
-                  "x": -131,
-                  "y": -155,
-                  "zoom": -0.6131159835189571
+                  "x": -18.9612331521505,
+                  "y": -729.8925858803638,
+                  "zoom": -0.8776565922429155
                 }
               },
               "icon": "lucide-layout-dashboard",
@@ -81,7 +81,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "431d7019494cfd00",

@@ -17,7 +17,8 @@
 		{"id":"7e4d143182dfa032","type":"text","text":"Игровая роль","x":-922,"y":-420,"width":250,"height":60,"color":"4"},
 		{"id":"4ec440797e9aa3bc","type":"text","text":"Пользователь","x":-560,"y":-420,"width":250,"height":60,"color":"4"},
 		{"id":"18fe55cd5baa1f87","type":"text","text":"Пользователи игры \"Глемпинг\"","x":60,"y":-300,"width":250,"height":60,"color":"4"},
-		{"id":"421cd3de3f918f51","type":"text","text":"Социальная сеть","x":-375,"y":-212,"width":250,"height":60,"color":"5"}
+		{"id":"421cd3de3f918f51","type":"text","text":"Социальная сеть","x":-375,"y":-212,"width":250,"height":60,"color":"5"},
+		{"id":"a0b80139502128f5","x":-1055,"y":-1220,"width":740,"height":400,"type":"file","file":"Игра/Проекты/П - Платформа ТеррИМ.md"}
 	],
 	"edges":[
 		{"id":"c9abd8dc39f74c66","fromNode":"50fb90991522e5f5","fromSide":"top","toNode":"7e4d143182dfa032","toSide":"bottom"},
