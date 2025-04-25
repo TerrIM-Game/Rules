@@ -15,9 +15,9 @@
               "state": {
                 "file": "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
                 "viewState": {
-                  "x": 73.28372293937386,
-                  "y": 284.99164333799945,
-                  "zoom": 0.11615193684895886
+                  "x": -131,
+                  "y": -155,
+                  "zoom": -0.30341546268562397
                 }
               },
               "icon": "lucide-layout-dashboard",
@@ -199,9 +199,9 @@
   },
   "active": "784c53d52224baf2",
   "lastOpenFiles": [
-    "Projects/Платформа Terrim/Без названия.md",
-    "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
     "Игра/Проекты/П - Платформа ТеррИМ.md",
+    "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
+    "Projects/Платформа Terrim/Без названия.md",
     "Игра/Проекты/П - Предбанник.md",
     "Игра/Проекты/П - КоммИТ.md",
     "Projects/Платформа Terrim",
