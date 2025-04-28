@@ -1,27 +1,24 @@
 {
   "main": {
-    "id": "c6abbfc19184ed02",
+    "id": "7b120a3bf6139815",
     "type": "split",
     "children": [
       {
-        "id": "a57c0c6e4361e516",
+        "id": "ee50068032299948",
         "type": "tabs",
         "children": [
           {
-            "id": "784c53d52224baf2",
+            "id": "bb46654ea6866925",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
-                "viewState": {
-                  "x": -329.7942948693176,
-                  "y": -75.80430765746036,
-                  "zoom": -0.44633585611979176
-                }
+                "file": "Игра/Следы/Новости.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Steam ТеррИМ"
+              "icon": "lucide-file",
+              "title": "Новости"
             }
           }
         ]
@@ -30,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "0a2c03d059539358",
+    "id": "e5df3808834f0dba",
     "type": "split",
     "children": [
       {
-        "id": "6ef8efa93d647693",
+        "id": "0432525015782110",
         "type": "tabs",
         "children": [
           {
-            "id": "6d36e76d8d427785",
+            "id": "437351558c6b2dcc",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -51,16 +48,16 @@
             }
           },
           {
-            "id": "2f0279f2691b4797",
+            "id": "6984cda5c3c0e2fb",
             "type": "leaf",
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#Tools",
+                "query": "",
                 "matchingCase": false,
-                "explainSearch": true,
-                "collapseAll": true,
-                "extraContext": true,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
@@ -68,7 +65,7 @@
             }
           },
           {
-            "id": "8f70e94e58c0acce",
+            "id": "7c8efdac13731a7e",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,24 +78,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
-    "id": "431d7019494cfd00",
+    "id": "1b78ae16b750f15a",
     "type": "split",
     "children": [
       {
-        "id": "f80ef2e4538f16c1",
+        "id": "ea70b98da12c828c",
         "type": "tabs",
         "children": [
           {
-            "id": "63950fb892b9f059",
+            "id": "8addbd2e25b494af",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Русская папка/Русская мамка.md",
+                "file": "Игра/Проекты/П - Тест.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -108,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Обратные ссылки для Русская мамка"
+              "title": "Обратные ссылки для П - Тест"
             }
           },
           {
-            "id": "66e68d1038d674d7",
+            "id": "e671817cad570b7b",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Русская папка/Русская мамка.md",
+                "file": "Игра/Проекты/П - Тест.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Исходящие ссылки из Русская мамка"
+              "title": "Исходящие ссылки из П - Тест"
             }
           },
           {
-            "id": "b565b2e7f43b6a94",
+            "id": "4e85e89c5a1c9fa9",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -141,42 +137,28 @@
             }
           },
           {
-            "id": "b414ba557dce118d",
+            "id": "14db95c3ef04b6ac",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md",
+                "file": "Игра/Следы/Новости.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура README"
+              "title": "Структура Новости"
             }
           },
           {
-            "id": "8a20c6a43bb0d056",
+            "id": "da685cf2fdbb4b72",
             "type": "leaf",
             "state": {
               "type": "git-view",
               "state": {},
               "icon": "git-pull-request",
               "title": "Source Control"
-            }
-          },
-          {
-            "id": "5d0b9df405b0b9ac",
-            "type": "leaf",
-            "state": {
-              "type": "all-properties",
-              "state": {
-                "sortOrder": "frequency",
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-archive",
-              "title": "Все свойства"
             }
           }
         ],
@@ -194,48 +176,47 @@
       "daily-notes:Сегодняшняя заметка": false,
       "templates:Вставить шаблон": false,
       "command-palette:Открыть палитру команд": false,
-      "obsidian-git:Open Git source control": false,
-      "workspaces:Пространства": false
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "784c53d52224baf2",
+  "active": "bb46654ea6866925",
   "lastOpenFiles": [
-    "Игра/Проекты/П - Платформа ТеррИМ.md",
-    "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
-    "Projects/Платформа Terrim/Без названия.md",
-    "Игра/Проекты/П - Предбанник.md",
-    "Игра/Проекты/П - КоммИТ.md",
-    "Projects/Платформа Terrim",
-    "Projects",
-    "Игра/Проекты/П - Платформа Terrim",
-    "Ω_system/tools/MkDocs.md",
-    "Ω_system/tools/Telegramm Bot/Бот Тезаурус.md",
-    "Ω_system/tools/Telegramm Bot/telegram_bot.py",
-    "system/tools/Telegramm Bot/Не подтвержден 217740.crdownload",
-    "Ω_system/tools/Obsidian.md",
-    "Ω_system/tools/Telegramm Bot",
-    "publisher.md",
-    "Игра/ТеррИМчане/Рудых Денис.md",
-    "Ω_system/tools/GitBook.md",
-    "README.md",
-    "Правила Игры/Тезаурус.md",
-    "Тезаурус/README.md",
-    "Правила Игры/Совладение.md",
-    "Правила Игры/Смыслы.md",
-    "Правила Игры/Правила игры.md",
-    "Правила Игры/Механизмы.md",
+    "Игра/Следы/История.md",
+    "Добро пожаловать/Приглашение в Игру.md",
     "Тезаурус/ТеррИМ.md",
+    "Тезаурус/README.md",
     "Тезаурус",
+    "Игра/ТеррИМчане/Валерия Димитрова.md",
+    "Игра/ТеррИМчане/Анвар Кадыров.md",
+    "Игра/Проекты/П - Платформа ТеррИМ.md",
+    "Игра/Проекты/П - КоммИТ.md",
+    "Игра/README.md",
+    "Добро пожаловать/Игра.md",
+    "Ω_system/tools/Telegramm Bot/telegram_bot.py",
+    "Ω_system/tools/Telegramm Bot/Бот Тезаурус.md",
+    "Ω_system/types/Contract.md",
+    "Ω_system/types/Project.md",
+    "Ω_system/types/Member.md",
+    "Ω_system/tools/Telegramm Bot",
+    "Ω_system/tools/README.md",
+    "Ω_system/tools/Obsidian.md",
+    "Ω_system/tools/MkDocs.md",
+    "Ω_system/tools/MarkDown.md",
+    "Ω_system/tools/GitHub.md",
+    "Ω_system/tools/GitBook.md",
+    "Ω_system/tools/Git.md",
     "Ω_system/templates/project.md",
     "Ω_system/templates/member.md",
     "Ω_system/templates/contract.md",
-    "Игра/ТеррИМчане/README.md",
-    "Игра/ТеррИМчане/Скотников Дима.md",
-    "Игра/ТеррИМчане/Анвар Кадыров.md",
-    "Игра/ТеррИМчане/Валерия Димитрова.md",
-    "Без названия.canvas",
-    "system/tools/git",
-    "Правила Игры",
-    "Игра/Следы"
+    "Ω_system/types",
+    "Ω_system/tools",
+    "Ω_system/templates",
+    "Ω_system/README.md",
+    "Ω_system",
+    "publisher.md",
+    "Projects/Платформа Terrim/Steam ТеррИМ.canvas",
+    "Projects/Платформа Terrim",
+    "Projects",
+    "Игра/Договоренности"
   ]
 }
